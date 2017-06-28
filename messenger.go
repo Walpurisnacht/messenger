@@ -377,6 +377,34 @@ func (m *Messenger) classify(info MessageInfo, e Entry) Action {
 	return UnknownAction
 }
 
+// Create a Get Started button
+func (m *Messenger) NewGetStarted() error {
+
+	gs := []byte(`{
+	"get_started": {
+			"payload": "GET_STARTED_PAYLOAD"
+		}
+	}`)
+
+	req, err := http.NewRequest("POST", "https://graph.facebook.com/v2.6/me/messenger_profile", bytes.NewBuffer(gs))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.URL.RawQuery = "access_token=" + m.token
+
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	return checkFacebookError(resp.Body)
+}
+
 // newVerifyHandler returns a function which can be used to handle webhook verification
 func newVerifyHandler(token string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {

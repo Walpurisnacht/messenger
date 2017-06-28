@@ -43,4 +43,5 @@ type CallToActionsItem struct {
 	URL                string `json:"url,omitempty"`
 	WebviewHeightRatio string `json:"webview_height_ratio,omitempty"`
 	MessengerExtension bool   `json:"messenger_extensions,omitempty"`
+	CallToActions []CallToActionsItem `json:"call_to_actions"`
 }
